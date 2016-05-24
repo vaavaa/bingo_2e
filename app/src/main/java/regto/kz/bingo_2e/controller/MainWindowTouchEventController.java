@@ -1,0 +1,137 @@
+package regto.kz.bingo_2e.controller;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import regto.kz.bingo_2e.R;
+import regto.kz.bingo_2e.view.MainGamePanel;
+import regto.kz.bingo_2e.view.PanelLeft;
+
+public class MainWindowTouchEventController extends LinearLayout {
+
+    private static int MIN_DISTANCE_X = 200;
+    private static int MIN_DISTANCE_Y = 200;
+    private int mheight = 0;
+    private int mwidth = 0;
+
+    private Rect l_rect = new Rect();
+    private Rect r_rect = new Rect();
+    private Rect t_rect = new Rect();
+    private Rect b_rect = new Rect();
+
+    private float x1 = 0;
+    private float x2 = 0;
+    private float y1 = 0;
+    private float y2 = 0;
+
+    private Context cnx;
+    private RelativeLayout mainView;
+
+    public MainWindowTouchEventController(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView(context);
+    }
+
+    public MainWindowTouchEventController(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView(context);
+    }
+
+    public MainWindowTouchEventController(Context context) {
+        super(context);
+        initView(context);
+    }
+
+    private void initView(Context context) {
+
+        //Сохранили контекст
+        cnx = context;
+
+        //Надули
+        View vw = inflate(context, R.layout.activity_main_controller, null);
+        mainView = (RelativeLayout) vw;
+
+        LinearLayout llsf = (LinearLayout) vw.findViewById(R.id.gmeSurface);
+        llsf.addView(new MainGamePanel(context));
+        addView(vw);
+
+        mheight = getScreenHeight();
+        mwidth = getScreenWidth();
+
+        l_rect.set(0, 0, MIN_DISTANCE_X, mheight);
+        r_rect.set(mwidth - MIN_DISTANCE_X, 0, mwidth, mheight);
+        t_rect.set(0, 0, mwidth, MIN_DISTANCE_Y);
+        b_rect.set(0, mheight - MIN_DISTANCE_Y, mwidth, mheight);
+    }
+
+    @Override
+    public boolean onTouchEvent(final MotionEvent event) {
+
+        boolean handled = false;
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                handled = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                float deltaX = x2 - x1;
+                float deltaY = y2 - y1;
+                if (Math.abs(deltaX) > MIN_DISTANCE_X / 2) {
+                    if (l_rect.contains((int) x1, (int) y1)) CreateLeftPanel();
+                    if (l_rect.contains((int) x2, (int) y2)) RemoveLeftPanel();
+                    if (r_rect.contains((int) x1, (int) y1))
+                        Toast.makeText(getContext(), "Right Rect", Toast.LENGTH_SHORT).show();
+                }
+                if (Math.abs(deltaY) > MIN_DISTANCE_Y / 2) {
+
+                    if (t_rect.contains((int) x1, (int) y1))
+                        Toast.makeText(getContext(), "Top Rect", Toast.LENGTH_SHORT).show();
+                    if (b_rect.contains((int) x1, (int) y1))
+                        Toast.makeText(getContext(), "Bottom Rect", Toast.LENGTH_SHORT).show();
+                }
+                handled = true;
+                break;
+            default:
+                // do nothing
+                break;
+        }
+        return super.onTouchEvent(event) || handled;
+    }
+
+
+    private int getResourceByID(String ResType, String ResName) {
+        Resources resources = getContext().getResources();
+        return resources.getIdentifier(ResName, ResType,
+                getContext().getPackageName());
+    }
+
+    private static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    private static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    private void CreateLeftPanel() {
+        if (mainView.findViewById(R.id.l_panel) == null) {
+            PanelLeft pl = new PanelLeft(cnx, mainView,l_rect);
+        }
+    }
+    private void RemoveLeftPanel() {
+        if (mainView.findViewById(R.id.l_panel) != null) {
+            mainView.removeView(mainView.findViewById(R.id.l_panel));
+        }
+    }
+
+}
