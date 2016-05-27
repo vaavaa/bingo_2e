@@ -16,8 +16,8 @@ import regto.kz.bingo_2e.view.PanelLeft;
 
 public class MainWindowTouchEventController extends LinearLayout {
 
-    private static int MIN_DISTANCE_X = 200;
-    private static int MIN_DISTANCE_Y = 200;
+    private static int MIN_DISTANCE_X = Params.MIN_DISTANCE_X;
+    private static int MIN_DISTANCE_Y = Params.MIN_DISTANCE_Y;
     private int mheight = 0;
     private int mwidth = 0;
 
@@ -86,13 +86,12 @@ public class MainWindowTouchEventController extends LinearLayout {
                 y2 = event.getY();
                 float deltaX = x2 - x1;
                 float deltaY = y2 - y1;
-                if (Math.abs(deltaX) > MIN_DISTANCE_X / 2) {
+                if (Math.abs(deltaX) > MIN_DISTANCE_X / 3) {
                     if (l_rect.contains((int) x1, (int) y1)) CreateLeftPanel();
-                    if (l_rect.contains((int) x2, (int) y2)) RemoveLeftPanel();
                     if (r_rect.contains((int) x1, (int) y1))
                         Toast.makeText(getContext(), "Right Rect", Toast.LENGTH_SHORT).show();
                 }
-                if (Math.abs(deltaY) > MIN_DISTANCE_Y / 2) {
+                if (Math.abs(deltaY) > MIN_DISTANCE_Y / 3) {
 
                     if (t_rect.contains((int) x1, (int) y1))
                         Toast.makeText(getContext(), "Top Rect", Toast.LENGTH_SHORT).show();
@@ -126,6 +125,7 @@ public class MainWindowTouchEventController extends LinearLayout {
     private void CreateLeftPanel() {
         if (mainView.findViewById(R.id.l_panel) == null) {
             PanelLeft pl = new PanelLeft(cnx, mainView,l_rect);
+            invalidate();
         }
     }
     private void RemoveLeftPanel() {
