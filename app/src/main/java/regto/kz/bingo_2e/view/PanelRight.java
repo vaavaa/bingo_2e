@@ -1,61 +1,109 @@
 package regto.kz.bingo_2e.view;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Handler;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import regto.kz.bingo_2e.R;
+import regto.kz.bingo_2e.controller.MainWindowTouchEventController;
+import regto.kz.bingo_2e.controller.Params;
 
 public class PanelRight extends FrameLayout {
 
-    static final int MIN_DISTANCE = 100;
+    private float x1 = 0;
+    private float x2 = 0;
+    private float y1 = 0;
+    private float y2 = 0;
+
+    private static int MIN_DISTANCE_X = Params.MIN_DISTANCE_X;
+
+    private Rect own_Panel;
+    private RelativeLayout own_prnt;
+    private View view_Panel;
 
 
-    public PanelRight(Context context){
+    public PanelRight(Context context, RelativeLayout RL, Rect rect) {
         super(context);
-        init(context);
+        init(context, RL, rect);
     }
 
-    public PanelRight(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-        init(context);
-    }
+    private void init(final Context context, RelativeLayout RL, Rect rect) {
 
-    public PanelRight(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context);
-    }
+        own_Panel = rect;
+        own_prnt = RL;
 
-    private void init(final Context ct) {
-        FrameLayout Relative_Lock = (FrameLayout)inflate(getContext(), R.layout.panel_right, null);
-        this.addView(Relative_Lock);
-    }
-    @Override
-    public boolean onTouchEvent(final MotionEvent event) {
-        float x1=0;
-        float x2=0;
-        boolean handled = false;
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                x1 = event.getX();
-                handled=true;
-                break;
-            case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                float deltaX = x2 - x1;
-                if (Math.abs(deltaX) > MIN_DISTANCE)
-                {
-                    //Do what we need to do
+        //Надули
+        View vw = inflate(context, R.layout.panel_right, null);
+        view_Panel = vw;
 
+
+        vw.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean handled = false;
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = event.getX();
+                        y1 = event.getY();
+                        handled = true;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        x2 = event.getX();
+                        y2 = event.getY();
+                        float deltaX = x2 - x1;
+                        float deltaY = y2 - y1;
+                        if (Math.abs(deltaX) > MIN_DISTANCE_X / 3) {
+                            if (own_Panel.contains((int) x1, (int) x1)) {
+                                HideAndRemove_Panel();
+                            }
+                        }
+                        handled = true;
+                        break;
+                    default:
+                        // do nothing
+                        break;
                 }
-                handled=true;
-                break;
-            default:
-                // do nothing
-                break;
-        }
-        return super.onTouchEvent(event) || handled;
+                return handled;
+            }
+        });
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(Math.abs(rect.left - rect.right), Math.abs(rect.top - rect.bottom));
+        params.topMargin = rect.top;
+        params.setMarginStart(getScreenWidth() - Math.abs(rect.left - rect.right));
+        own_prnt.addView(vw, params);
+        AnimateView();
+    }
+
+    private void HideAndRemove_Panel(){
+        this.bringToFront();
+        Animation push_up = AnimationUtils.loadAnimation(getContext(), R.anim.push_up_out_right);
+        view_Panel.startAnimation(push_up);
+        view_Panel.setVisibility(View.INVISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                own_prnt.removeView(view_Panel);
+                own_prnt.findViewById(R.id.button_rightpanel).setVisibility(View.VISIBLE);
+            }
+        }, 310);
+
+    }
+    public void AnimateView(){
+        Animation push_in = AnimationUtils.loadAnimation(getContext(), R.anim.push_up_in_right);
+        view_Panel.startAnimation(push_in);
+    }
+    private static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    private static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
 }

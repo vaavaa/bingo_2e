@@ -3,6 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/in_point">
+    <Button android:id="@+id/button_leftpanel"
+        android:layout_height="match_parent"
+        android:layout_width="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin" />
+    <Button android:id="@+id/button_toppanel"
+        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,7 +20,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:id="@+id/bg_pic"/>
     <LinearLayout
         android:id="@+id/gmeSurface"
         android:orientation="horizontal"
@@ -21,4 +32,16 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin">
     </LinearLayout>
+    <Button android:id="@+id/button_bottompanel"
+        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"/>
+    <Button android:id="@+id/button_rightpanel"
+        android:layout_height="match_parent"
+        android:layout_width="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_alignParentEnd="true"/>
 </RelativeLayout>

@@ -76,7 +76,7 @@ public class PanelLeft extends FrameLayout {
         });
         LayoutParams params = new LayoutParams(Math.abs(rect.left - rect.right), Math.abs(rect.top - rect.bottom));
         params.leftMargin = rect.left;
-        params.topMargin = rect.bottom;
+        params.topMargin = rect.top;
         RL.addView(vw, params);
         AnimateView();
     }
@@ -91,8 +91,9 @@ public class PanelLeft extends FrameLayout {
             @Override
             public void run() {
                 own_prnt.removeView(view_Panel);
+                own_prnt.findViewById(R.id.button_leftpanel).setVisibility(View.VISIBLE);
             }
-        }, 350);
+        }, 310);
 
     }
     public void AnimateView(){

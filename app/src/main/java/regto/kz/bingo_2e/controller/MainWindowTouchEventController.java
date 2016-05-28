@@ -13,13 +13,12 @@ import android.widget.Toast;
 import regto.kz.bingo_2e.R;
 import regto.kz.bingo_2e.view.MainGamePanel;
 import regto.kz.bingo_2e.view.PanelLeft;
+import regto.kz.bingo_2e.view.PanelRight;
 
-public class MainWindowTouchEventController extends LinearLayout {
+public class MainWindowTouchEventController extends RelativeLayout {
 
     private static int MIN_DISTANCE_X = Params.MIN_DISTANCE_X;
     private static int MIN_DISTANCE_Y = Params.MIN_DISTANCE_Y;
-    private int mheight = 0;
-    private int mwidth = 0;
 
     private Rect l_rect = new Rect();
     private Rect r_rect = new Rect();
@@ -50,6 +49,8 @@ public class MainWindowTouchEventController extends LinearLayout {
     }
 
     private void initView(Context context) {
+        int mheight = 0;
+        int mwidth = 0;
 
         //Сохранили контекст
         cnx = context;
@@ -62,6 +63,7 @@ public class MainWindowTouchEventController extends LinearLayout {
         llsf.addView(new MainGamePanel(context));
         addView(vw);
 
+
         mheight = getScreenHeight();
         mwidth = getScreenWidth();
 
@@ -69,6 +71,9 @@ public class MainWindowTouchEventController extends LinearLayout {
         r_rect.set(mwidth - MIN_DISTANCE_X, 0, mwidth, mheight);
         t_rect.set(0, 0, mwidth, MIN_DISTANCE_Y);
         b_rect.set(0, mheight - MIN_DISTANCE_Y, mwidth, mheight);
+
+        findViewById(R.id.button_leftpanel).setOnClickListener(mPanelListener);
+        findViewById(R.id.button_rightpanel).setOnClickListener(mPanelListener);
     }
 
     @Override
@@ -107,6 +112,19 @@ public class MainWindowTouchEventController extends LinearLayout {
         return super.onTouchEvent(event) || handled;
     }
 
+    // Create an anonymous implementation of OnClickListener
+    private View.OnClickListener mPanelListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            v.setVisibility(View.INVISIBLE);
+            if (v.getId() == R.id.button_leftpanel) {
+                CreateLeftPanel();
+            }
+            if (v.getId() == R.id.button_rightpanel) {
+                CreateRightPanel();
+            }
+
+        }
+    };
 
     private int getResourceByID(String ResType, String ResName) {
         Resources resources = getContext().getResources();
@@ -124,13 +142,15 @@ public class MainWindowTouchEventController extends LinearLayout {
 
     private void CreateLeftPanel() {
         if (mainView.findViewById(R.id.l_panel) == null) {
-            PanelLeft pl = new PanelLeft(cnx, mainView,l_rect);
+            PanelLeft pl = new PanelLeft(cnx, mainView, l_rect);
             invalidate();
         }
     }
-    private void RemoveLeftPanel() {
-        if (mainView.findViewById(R.id.l_panel) != null) {
-            mainView.removeView(mainView.findViewById(R.id.l_panel));
+
+    private void CreateRightPanel() {
+        if (mainView.findViewById(R.id.r_panel) == null) {
+            PanelRight pr = new PanelRight(cnx, mainView, l_rect);
+            invalidate();
         }
     }
 
