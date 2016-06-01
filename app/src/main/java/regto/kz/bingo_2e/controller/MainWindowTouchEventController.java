@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import regto.kz.bingo_2e.R;
 import regto.kz.bingo_2e.view.MainGamePanel;
+import regto.kz.bingo_2e.view.PanelBottom;
 import regto.kz.bingo_2e.view.PanelLeft;
 import regto.kz.bingo_2e.view.PanelRight;
+import regto.kz.bingo_2e.view.PanelTop;
 
 public class MainWindowTouchEventController extends RelativeLayout {
 
@@ -74,6 +76,8 @@ public class MainWindowTouchEventController extends RelativeLayout {
 
         findViewById(R.id.button_leftpanel).setOnClickListener(mPanelListener);
         findViewById(R.id.button_rightpanel).setOnClickListener(mPanelListener);
+        findViewById(R.id.button_toppanel).setOnClickListener(mPanelListener);
+        findViewById(R.id.button_bottompanel).setOnClickListener(mPanelListener);
     }
 
     @Override
@@ -122,7 +126,12 @@ public class MainWindowTouchEventController extends RelativeLayout {
             if (v.getId() == R.id.button_rightpanel) {
                 CreateRightPanel();
             }
-
+            if (v.getId() == R.id.button_toppanel) {
+                CreateTopPanel();
+            }
+            if (v.getId() == R.id.button_bottompanel) {
+                CreateBottomPanel();
+            }
         }
     };
 
@@ -141,17 +150,57 @@ public class MainWindowTouchEventController extends RelativeLayout {
     }
 
     private void CreateLeftPanel() {
+        Remove_Horizontal_Panels();
         if (mainView.findViewById(R.id.l_panel) == null) {
             PanelLeft pl = new PanelLeft(cnx, mainView, l_rect);
+            findViewById(R.id.button_leftpanel).setTag(pl);
             invalidate();
         }
     }
 
     private void CreateRightPanel() {
+        Remove_Horizontal_Panels();
         if (mainView.findViewById(R.id.r_panel) == null) {
-            PanelRight pr = new PanelRight(cnx, mainView, l_rect);
+            PanelRight pr = new PanelRight(cnx, mainView, r_rect);
+            findViewById(R.id.button_rightpanel).setTag(pr);
+            invalidate();
+        }
+    }
+    private void CreateTopPanel() {
+        Remove_Vertical_Panels();
+        if (mainView.findViewById(R.id.t_panel) == null) {
+            PanelTop pt = new PanelTop(cnx, mainView, t_rect);
+            mainView.findViewById(R.id.button_toppanel).setTag(pt);
             invalidate();
         }
     }
 
+    private void CreateBottomPanel() {
+        Remove_Vertical_Panels();
+        if (mainView.findViewById(R.id.b_panel) == null) {
+            PanelBottom pb = new PanelBottom(cnx, mainView, b_rect);
+            mainView.findViewById(R.id.button_bottompanel).setTag(pb);
+            invalidate();
+        }
+    }
+    private void Remove_Horizontal_Panels(){
+        if (mainView.findViewById(R.id.b_panel)!=null) {
+            PanelBottom pb = (PanelBottom) mainView.findViewById(R.id.button_bottompanel).getTag();
+            pb.HideAndRemove_Panel();
+        }
+        if (mainView.findViewById(R.id.t_panel)!=null) {
+            PanelTop pt = (PanelTop) mainView.findViewById(R.id.button_toppanel).getTag();
+            pt.HideAndRemove_Panel();
+        }
+    }
+    private void Remove_Vertical_Panels(){
+        if (mainView.findViewById(R.id.l_panel)!=null) {
+            PanelLeft pl = (PanelLeft) mainView.findViewById(R.id.button_leftpanel).getTag();
+            pl.HideAndRemove_Panel();
+        }
+        if (mainView.findViewById(R.id.r_panel)!=null) {
+            PanelRight pr = (PanelRight) mainView.findViewById(R.id.button_rightpanel).getTag();
+            pr.HideAndRemove_Panel();
+        }
+    }
 }

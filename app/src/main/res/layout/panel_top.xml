@@ -4,5 +4,6 @@
     android:background="@drawable/panel_bg"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:id="@+id/t_panel">
 </FrameLayout>

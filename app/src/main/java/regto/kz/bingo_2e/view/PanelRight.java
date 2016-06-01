@@ -59,7 +59,7 @@ public class PanelRight extends FrameLayout {
                         float deltaX = x2 - x1;
                         float deltaY = y2 - y1;
                         if (Math.abs(deltaX) > MIN_DISTANCE_X / 3) {
-                            if (own_Panel.contains((int) x1, (int) x1)) {
+                            if (own_Panel.contains((int)(own_Panel.left + x1), (int)(own_Panel.top+ y1))) {
                                 HideAndRemove_Panel();
                             }
                         }
@@ -79,7 +79,7 @@ public class PanelRight extends FrameLayout {
         AnimateView();
     }
 
-    private void HideAndRemove_Panel(){
+    public void HideAndRemove_Panel(){
         this.bringToFront();
         Animation push_up = AnimationUtils.loadAnimation(getContext(), R.anim.push_up_out_right);
         view_Panel.startAnimation(push_up);
