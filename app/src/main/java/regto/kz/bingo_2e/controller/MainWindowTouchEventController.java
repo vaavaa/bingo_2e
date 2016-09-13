@@ -2,14 +2,18 @@ package regto.kz.bingo_2e.controller;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import regto.kz.bingo_2e.App;
+import regto.kz.bingo_2e.MainActivity;
 import regto.kz.bingo_2e.R;
 import regto.kz.bingo_2e.view.MainGamePanel;
 import regto.kz.bingo_2e.view.PanelBottom;
@@ -34,6 +38,9 @@ public class MainWindowTouchEventController extends RelativeLayout {
 
     private Context cnx;
     private RelativeLayout mainView;
+    private App app;
+    private FrameLayout llsf;
+    private MainGamePanel mainGamePanel;
 
     public MainWindowTouchEventController(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -56,13 +63,16 @@ public class MainWindowTouchEventController extends RelativeLayout {
 
         //Сохранили контекст
         cnx = context;
+        app = ((App)((MainActivity)cnx).getApplication());
 
         //Надули
         View vw = inflate(context, R.layout.activity_main_controller, null);
         mainView = (RelativeLayout) vw;
 
-        LinearLayout llsf = (LinearLayout) vw.findViewById(R.id.gmeSurface);
-        llsf.addView(new MainGamePanel(context));
+        llsf = (FrameLayout) vw.findViewById(R.id.gmeSurface);
+        mainGamePanel = new MainGamePanel(context);
+        mainGamePanel.setZOrderMediaOverlay(true);
+        llsf.addView(mainGamePanel);
         addView(vw);
 
 

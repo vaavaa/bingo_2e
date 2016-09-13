@@ -5,7 +5,15 @@ package regto.kz.bingo_2e.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.view.MotionEvent;
+
+import regto.kz.bingo_2e.controller.GameObjects;
+import regto.kz.bingo_2e.view.DrawingObjects.SplashDrawable;
+
 
 /**
  * This is a test droid that is dragged, dropped, moved, smashed against
@@ -15,19 +23,33 @@ import android.view.MotionEvent;
  * @author impaler
  *
  */
-public class Droid {
-
+public class Droid extends GameObjects{
 	private Bitmap bitmap;	// the actual bitmap
+	private Bitmap init_bitmap;	// the actual bitmap
 	private int x;			// the X coordinate
 	private int y;			// the Y coordinate
+	private int x_pos;			// the X coordinate for chip place
+	private int y_pos;			// the Y coordinate for chip place
 	private boolean touched;	// if droid is touched/picked up
-	private Speed speed;	// the speed with its directions
-	
+	private SplashDrawable AnimatedSplash;
+	private Speed speed;
+	private String label;
+	private int value;
+	private int dstWidth;
+	private int	dstHeight;
+	private Paint mPaint;
+
+
 	public Droid(Bitmap bitmap, int x, int y) {
 		this.bitmap = bitmap;
+		this.init_bitmap = bitmap;
 		this.x = x;
 		this.y = y;
+		this.AnimatedSplash = new SplashDrawable(x,y,3);
 		this.speed = new Speed();
+		dstHeight = bitmap.getHeight()*3;
+		dstWidth = bitmap.getWidth()*3;
+		mPaint = new Paint();
 	}
 	
 	public Bitmap getBitmap() {
@@ -56,7 +78,30 @@ public class Droid {
 	public void setTouched(boolean touched) {
 		this.touched = touched;
 	}
-	
+
+	public void draw(Canvas canvas) {
+		AnimatedSplash.draw(canvas);
+		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), mPaint);
+	}
+
+
+	public int getX_pos() {
+		return x_pos;
+	}
+
+	public void setX_pos(int x_pos) {
+		this.x_pos = x_pos;
+	}
+
+	public int getY_pos() {
+		return y_pos;
+	}
+
+	public void setY_pos(int y_pos) {
+		this.y_pos = y_pos;
+	}
+
+
 	public Speed getSpeed() {
 		return speed;
 	}
@@ -65,17 +110,37 @@ public class Droid {
 		this.speed = speed;
 	}
 
-	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
 	}
 
 	/**
 	 * Method which updates the droid's internal state every tick
 	 */
 	public void update() {
+		bitmap = Bitmap.createScaledBitmap(init_bitmap, dstWidth, dstHeight, false);
+
+		if (init_bitmap.getHeight()> bitmap.getHeight()) AnimatedSplash.update();
+		else {
+
+			dstWidth = dstWidth - (int)dstWidth/3;
+			dstHeight = dstHeight - (int)dstHeight/3;
+		}
 		if (!touched) {
-			x += (speed.getXv() * speed.getxDirection()); 
-			y += (speed.getYv() * speed.getyDirection());
+//			x += (speed.getXv() * speed.getxDirection());
+//			y += (speed.getYv() * speed.getyDirection());
 		}
 	}
 	

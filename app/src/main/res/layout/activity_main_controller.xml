@@ -5,24 +5,17 @@
     android:id="@+id/in_point">
     <Button android:id="@+id/button_leftpanel"
         android:layout_height="match_parent"
-        android:layout_width="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin" />
+        android:layout_width="@dimen/button_horizontal_margin"
+        android:layout_marginTop="@dimen/button_horizontal_margin"
+        android:layout_marginBottom="@dimen/button_horizontal_margin"
+        android:background="@drawable/panel_yellow" />
     <Button android:id="@+id/button_toppanel"
-        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_height="@dimen/button_horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/board_0"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:id="@+id/bg_pic"/>
-    <LinearLayout
+        android:layout_marginEnd="@dimen/button_horizontal_margin"
+        android:layout_marginStart="@dimen/button_horizontal_margin"
+        android:background="@drawable/panel_yellow"/>
+    <FrameLayout
         android:id="@+id/gmeSurface"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -31,17 +24,20 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin">
-    </LinearLayout>
+    </FrameLayout>
+
     <Button android:id="@+id/button_bottompanel"
-        android:layout_height="@dimen/activity_horizontal_margin"
+        android:layout_height="@dimen/button_horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginEnd="@dimen/button_horizontal_margin"
+        android:layout_marginStart="@dimen/button_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/panel_yellow"/>
     <Button android:id="@+id/button_rightpanel"
         android:layout_height="match_parent"
-        android:layout_width="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_alignParentEnd="true"/>
+        android:layout_width="@dimen/button_horizontal_margin"
+        android:layout_marginTop="@dimen/button_horizontal_margin"
+        android:layout_marginBottom="@dimen/button_horizontal_margin"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/panel_yellow"/>
 </RelativeLayout>

@@ -40,6 +40,7 @@ public class PanelBottom extends FrameLayout {
 
         //Надули
         View vw = inflate(context, R.layout.panel_bottom, null);
+        vw.bringToFront();
         view_Panel = vw;
 
 

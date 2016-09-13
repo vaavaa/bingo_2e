@@ -10,13 +10,8 @@ import android.view.SurfaceHolder;
 import regto.kz.bingo_2e.view.MainGamePanel;
 
 
-/**
- * @author impaler
- *         <p/>
- *         The Main thread which contains the game loop. The thread must have access to
- *         the surface view and holder to trigger events every game tick.
- */
 public class MainThread extends Thread {
+
 
     private static final String TAG = MainThread.class.getSimpleName();
 
@@ -36,8 +31,15 @@ public class MainThread extends Thread {
     // flag to hold game state
     public static boolean running;
 
+    // flag to hold game pause state
+    public static boolean pause;
+
+
     public void setRunning(boolean running) {
         this.running = running;
+    }
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 
     public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel) {
@@ -53,54 +55,61 @@ public class MainThread extends Thread {
 
         long beginTime;        // the time when the cycle begun
         long timeDiff;        // the time it took for the cycle to execute
-        int sleepTime;        // ms to sleep (<0 if we're behind)
+        int sleepTime = 0;        // ms to sleep (<0 if we're behind)
         int framesSkipped;    // number of frames being skipped
 
-        sleepTime = 0;
 
         while (running) {
-            canvas = null;
-            // try locking the canvas for exclusive pixel editing
-            // in the surface
-            try {
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
-                    beginTime = System.currentTimeMillis();
-                    framesSkipped = 0;    // resetting the frames skipped
-                    // update game state
-                    this.gamePanel.update();
-                    // render state to the screen
-                    // draws the canvas on the panel
-                    this.gamePanel.render(canvas);
-                    // calculate how long did the cycle take
-                    timeDiff = System.currentTimeMillis() - beginTime;
-                    // calculate sleep time
-                    sleepTime = (int) (FRAME_PERIOD - timeDiff);
+            //If we don't pause main thread
+            if (!this.pause) {
+                canvas = null;
+                // try locking the canvas for exclusive pixel editing
+                // in the surface
+                try {
+                    canvas = this.surfaceHolder.lockCanvas();
+                    synchronized (surfaceHolder) {
+                        beginTime = System.currentTimeMillis();
+                        framesSkipped = 0;    // resetting the frames skipped
+                        // update game state
+                        this.gamePanel.update();
+                        // render state to the screen
+                        // draws the canvas on the panel
+                        this.gamePanel.render(canvas);
+                        // calculate how long did the cycle take
+                        timeDiff = System.currentTimeMillis() - beginTime;
+                        // calculate sleep time
+                        sleepTime = (int) (FRAME_PERIOD - timeDiff);
 
-                    if (sleepTime > 0) {
-                        // if sleepTime > 0 we're OK
-                        try {
-                            // send the thread to sleep for a short period
-                            // very useful for battery saving
-                            Thread.sleep(sleepTime);
-                        } catch (InterruptedException e) {
+                        if (sleepTime > 0) {
+                            // if sleepTime > 0 we're OK
+                            try {
+                                // send the thread to sleep for a short period
+                                // very useful for battery saving
+                                Thread.sleep(sleepTime);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+
+                        while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
+                            // we need to catch up
+                            this.gamePanel.update(); // update without rendering
+                            sleepTime += FRAME_PERIOD;    // add frame period to check if in next frame
+                            framesSkipped++;
                         }
                     }
-
-                    while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                        // we need to catch up
-                        this.gamePanel.update(); // update without rendering
-                        sleepTime += FRAME_PERIOD;    // add frame period to check if in next frame
-                        framesSkipped++;
+                } finally {
+                    // in case of an exception the surface is not left in
+                    // an inconsistent state
+                    if (canvas != null) {
+                        surfaceHolder.unlockCanvasAndPost(canvas);
                     }
-                }
-            } finally {
-                // in case of an exception the surface is not left in
-                // an inconsistent state
-                if (canvas != null) {
-                    surfaceHolder.unlockCanvasAndPost(canvas);
-                }
-            }    // end finally
+                }    // end finally
+            }
+            else try {
+                // just sleep for a while
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
         }
     }
 

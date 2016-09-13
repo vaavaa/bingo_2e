@@ -40,6 +40,7 @@ public class PanelTop extends FrameLayout {
 
         //Надули
         View vw = inflate(context, R.layout.panel_top, null);
+        vw.bringToFront();
         view_Panel = vw;
 
 

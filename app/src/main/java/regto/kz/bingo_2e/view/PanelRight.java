@@ -41,6 +41,7 @@ public class PanelRight extends FrameLayout {
 
         //Надули
         View vw = inflate(context, R.layout.panel_right, null);
+        vw.bringToFront();
         view_Panel = vw;
 
 
