@@ -1,6 +1,7 @@
 package regto.kz.bingo_2e.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -10,12 +11,15 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import regto.kz.bingo_2e.R;
 import regto.kz.bingo_2e.controller.Params;
+import regto.kz.bingo_2e.controller.TimeService;
 
 public class PanelLeft extends FrameLayout {
 
@@ -45,6 +49,13 @@ public class PanelLeft extends FrameLayout {
         View vw = inflate(context, R.layout.panel_left, null);
         view_Panel = vw;
 
+        ImageButton IB = (ImageButton)view_Panel.findViewById(R.id.start_button);
+        IB.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startService(new Intent(context, TimeService.class));
+            }
+        });
 
         vw.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {

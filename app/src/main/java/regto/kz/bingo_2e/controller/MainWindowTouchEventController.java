@@ -20,6 +20,7 @@ import regto.kz.bingo_2e.view.PanelBottom;
 import regto.kz.bingo_2e.view.PanelLeft;
 import regto.kz.bingo_2e.view.PanelRight;
 import regto.kz.bingo_2e.view.PanelTop;
+import regto.kz.bingo_2e.view.WinBallContainer;
 
 public class MainWindowTouchEventController extends RelativeLayout {
 
@@ -180,6 +181,8 @@ public class MainWindowTouchEventController extends RelativeLayout {
         Remove_Vertical_Panels();
         if (mainView.findViewById(R.id.t_panel) == null) {
             PanelTop pt = new PanelTop(cnx, mainView, t_rect);
+            WinBallContainer WBC = (WinBallContainer)mainView.findViewById(R.id.win_ball_container);
+            WBC.setAll_Visible(new int[]{8,9,4,3,5,10,34,23,17});
             mainView.findViewById(R.id.button_toppanel).setTag(pt);
             invalidate();
         }

@@ -3,5 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="button_yellow">#FFEB3B</color>
+    <color name="button_yellow">#ba0a0a</color>
+    <color name="ball_numeric_color">#ba0a0a</color>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.Log;
@@ -32,21 +33,21 @@ public class MainGamePanel extends SurfaceView implements
     private LinkedList<GameObjects> gObjects = new LinkedList<>();
     private App app;
     private Bitmap scaledBG;
+    private Paint bitmapPaint;
 
     public MainGamePanel(Context context) {
         super(context);
 
-        //getHolder().setFormat(PixelFormat.TRANSPARENT);
-        getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+        //getHolder().setFormat(PixelFormat.TRANSLUCENT);
         setZOrderOnTop(true);    // necessary
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
-
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
 
-        app = ((App)((MainActivity)context).getApplication());
+        app = ((App) ((MainActivity) context).getApplication());
         //set main thread in global variable
         app.setMainThreadLink(thread);
 
@@ -63,10 +64,17 @@ public class MainGamePanel extends SurfaceView implements
     public void surfaceCreated(SurfaceHolder holder) {
 
         Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.board_0);
-        float scale = (float)background.getWidth()/(float)getWidth();
-        int newWidth = Math.round(background.getWidth()/scale);
-        int newHeight = Math.round(background.getHeight()/scale);
+        //float scale = (float)background.getWidth()/(float)getWidth();
+        //int newWidth = Math.round(background.getWidth()/scale);
+        //int newHeight = Math.round(background.getHeight()/scale);
+        int newWidth = getWidth();
+        int newHeight = getHeight();
         scaledBG = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
+        bitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+        setWillNotDraw(false);
+
+        holder.setFixedSize(newWidth, newHeight);
+
 
         // at this point the surface is created and
         // we can safely start the game loop
@@ -107,7 +115,7 @@ public class MainGamePanel extends SurfaceView implements
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
             // create droid and load bitmap
-            droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1), (int)event.getX(), (int)event.getY());
+            droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1), (int) event.getX(), (int) event.getY());
             gObjects.add(droid);
 
             // delegating event handling to the droid
@@ -133,7 +141,7 @@ public class MainGamePanel extends SurfaceView implements
 
     public void render(Canvas canvas) {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        canvas.drawBitmap(scaledBG, 0, 0, null); // draw the background
+        canvas.drawBitmap(scaledBG, 0, 0, bitmapPaint); // draw the background
         if (gObjects.size() > 0) {
             for (int i = 0; i < gObjects.size(); i++) {
                 gObjects.get(i).draw(canvas);

@@ -4,5 +4,11 @@
     <dimen name="activity_vertical_margin">27dp</dimen>
     <dimen name="button_vertical_margin">23dp</dimen>
     <dimen name="button_horizontal_margin">23dp</dimen>
+    <dimen name= "ball_space">15dp</dimen>
+    <dimen name= "ball_size">40dp</dimen>
+    <dimen name= "ball_size_cancel">18dp</dimen>
+    <dimen name="ball_text_size">24sp</dimen>
+    <dimen name="ball_horizontal_margin">2dp</dimen>
+    <dimen name="ball_vertical_margin">2dp</dimen>
 
 </resources>
